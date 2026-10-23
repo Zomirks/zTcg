@@ -1,5 +1,11 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { CheckCircle2Icon, CirclePlusIcon, MoreHorizontalIcon, PackageOpenIcon, XIcon } from 'lucide-react';
+import {
+    CheckCircle2Icon,
+    CirclePlusIcon,
+    MoreHorizontalIcon,
+    PackageOpenIcon,
+    XIcon,
+} from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -32,27 +38,33 @@ interface Props {
 }
 
 export default function Index({ tcgs: tcgList }: Props) {
-	const [dismissedMessage, setDismissedMessage] = useState<string | null>(null);
+    const [dismissedMessage, setDismissedMessage] = useState<string | null>(
+        null,
+    );
 
-	const { flash } = usePage().props;
-	const showFlash = flash?.success && flash.success !== dismissedMessage;
+    const { flash } = usePage().props;
+    const showFlash = flash?.success && flash.success !== dismissedMessage;
 
     return (
         <>
             <Head title="TCG" />
 
-			<div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-				{showFlash && flash?.success && (
-					<div className="mt-4 flex items-center justify-between rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-200">
-						<div className="flex items-center gap-2">
-							<CheckCircle2Icon className="size-4" />
-							{flash.success}
-						</div>
-						<button onClick={() => setDismissedMessage(flash.success ?? null)}>
-							<XIcon className="size-4" />
-						</button>
-					</div>
-				)}
+            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+                {showFlash && flash?.success && (
+                    <div className="mt-4 flex items-center justify-between rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-200">
+                        <div className="flex items-center gap-2">
+                            <CheckCircle2Icon className="size-4" />
+                            {flash.success}
+                        </div>
+                        <button
+                            onClick={() =>
+                                setDismissedMessage(flash.success ?? null)
+                            }
+                        >
+                            <XIcon className="size-4" />
+                        </button>
+                    </div>
+                )}
 
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between">
@@ -94,8 +106,12 @@ export default function Index({ tcgs: tcgList }: Props) {
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead className="w-40">Logo</TableHead>
-                                        <TableHead className="w-40">Nom</TableHead>
+                                        <TableHead className="w-40">
+                                            Logo
+                                        </TableHead>
+                                        <TableHead className="w-40">
+                                            Nom
+                                        </TableHead>
                                         <TableHead>Description</TableHead>
                                         <TableHead className="w-20 text-right">
                                             Actions
@@ -104,24 +120,27 @@ export default function Index({ tcgs: tcgList }: Props) {
                                 </TableHeader>
                                 <TableBody>
                                     {tcgList.map((tcg) => (
-										<TableRow key={tcg.id}>
-											<TableCell>
-												{tcg.logo_path ? (
-													<img
-														src={`/storage/${tcg.logo_path}`}
-														alt={tcg.name}
-														className='h-8 w-8 rounded object-cover'
-													/>
-												):(
-													<span className="text-muted-foreground">-</span>
-												)}
-											</TableCell>
+                                        <TableRow key={tcg.id}>
+                                            <TableCell>
+                                                {tcg.logo_path ? (
+                                                    <img
+                                                        src={`/storage/${tcg.logo_path}`}
+                                                        alt={tcg.name}
+                                                        className="h-8 w-8 rounded object-cover"
+                                                    />
+                                                ) : (
+                                                    <span className="text-muted-foreground">
+                                                        -
+                                                    </span>
+                                                )}
+                                            </TableCell>
                                             <TableCell>{tcg.name}</TableCell>
-											<TableCell>
-												{tcg.description && tcg.description.length > 100
-													? `${tcg.description.slice(0, 100)}…`
-													: tcg.description}
-											</TableCell>
+                                            <TableCell>
+                                                {tcg.description &&
+                                                tcg.description.length > 100
+                                                    ? `${tcg.description.slice(0, 100)}…`
+                                                    : tcg.description}
+                                            </TableCell>
                                             <TableCell className="text-right">
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger
@@ -142,7 +161,9 @@ export default function Index({ tcgs: tcgList }: Props) {
                                                         <DropdownMenuItem
                                                             onClick={() =>
                                                                 router.visit(
-                                                                    tcgs.edit.url(tcg),
+                                                                    tcgs.edit.url(
+                                                                        tcg,
+                                                                    ),
                                                                 )
                                                             }
                                                         >
@@ -153,7 +174,9 @@ export default function Index({ tcgs: tcgList }: Props) {
                                                             variant="destructive"
                                                             onClick={() =>
                                                                 router.delete(
-                                                                    tcgs.destroy.url(tcg),
+                                                                    tcgs.destroy.url(
+                                                                        tcg,
+                                                                    ),
                                                                 )
                                                             }
                                                         >
@@ -175,7 +198,5 @@ export default function Index({ tcgs: tcgList }: Props) {
 }
 
 Index.layout = {
-	breadcrumbs: [
-		{ title: 'TCG', href: tcgs.index() }
-	]
-}
+    breadcrumbs: [{ title: 'TCG', href: tcgs.index() }],
+};

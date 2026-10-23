@@ -1,13 +1,18 @@
 import { Head, useForm } from '@inertiajs/react';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import collectionItems from '@/routes/collection-items';
-import type { CollectionItem, CollectionItemFormData, Product, Tcg } from '@/types/models';
+import type {
+    CollectionItem,
+    CollectionItemFormData,
+    Product,
+    Tcg,
+} from '@/types/models';
 import CollectionItemForm from './partials/collection-item-form';
 
 interface Props {
     collection_item: CollectionItem;
     products: Product[];
-	tcgs: Tcg[];
+    tcgs: Tcg[];
 }
 
 export default function Edit({ collection_item, products, tcgs }: Props) {
@@ -42,7 +47,7 @@ export default function Edit({ collection_item, products, tcgs }: Props) {
                         <CollectionItemForm
                             form={form}
                             products={products}
-							tcgs={tcgs} 
+                            tcgs={tcgs}
                             defaultTcgId={collection_item.product.set.tcg.id}
                             submitLabel="Enregistrer"
                             submittingLabel="Enregistrement..."
@@ -56,8 +61,8 @@ export default function Edit({ collection_item, products, tcgs }: Props) {
 }
 
 Edit.layout = {
-	breadcrumbs: [
-		{ title: 'Ma collection', href: collectionItems.index() },
-		{ title: 'Modifier', href: '' },
-	]
-}
+    breadcrumbs: [
+        { title: 'Ma collection', href: collectionItems.index() },
+        { title: 'Modifier', href: '' },
+    ],
+};
