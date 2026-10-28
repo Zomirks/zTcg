@@ -8,15 +8,26 @@ on:
 
 concurrency:
   group: deploy-${{ github.ref_name }}
-  cancel-in-progress: true
+  cancel-in-progress: false
+
+permissions:
+  contents: read
 
 jobs:
+  lint:
+    uses: ./.github/workflows/lint.yml
+
+  tests:
+    uses: ./.github/workflows/tests.yml
+
   deploy:
+    needs: [lint, tests]
     runs-on: ubuntu-latest
+    environment: ${{ github.ref_name == 'main' && 'production' || 'preprod' }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -27,16 +38,19 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-dev --optimize-autoloader --no-interaction
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: '22'
+          cache: 'pnpm'
 
       - name: Install & build assets
         run: |
-          npm ci
-          npm run build
+          pnpm install --frozen-lockfile
+          pnpm run build
 
       - name: Set deploy target
         id: target
@@ -52,7 +66,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
 
       - name: Deploy via rsync
         run: |

@@ -37,11 +37,11 @@ export default function TwoFactorChallenge() {
             toggleText: 'login using a recovery code',
         };
     }, [showRecoveryInput]);
-	
-	setLayoutProps({
-		title: authConfigContent.title,
-		description: authConfigContent.description,
-	});
+
+    setLayoutProps({
+        title: authConfigContent.title,
+        description: authConfigContent.description,
+    });
 
     const toggleRecoveryMode = (clearErrors: () => void): void => {
         setShowRecoveryInput(!showRecoveryInput);

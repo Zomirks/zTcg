@@ -1,12 +1,12 @@
 import { Head, useForm } from '@inertiajs/react';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
-import { index as collectionItemsIndex } from '@/routes/collection-items';
+import collectionItems from '@/routes/collection-items';
 import type { CollectionItemFormData, Product, Tcg } from '@/types/models';
 import CollectionItemForm from './partials/collection-item-form';
 
 interface Props {
     products: Product[];
-	tcgs: Tcg[]
+    tcgs: Tcg[];
 }
 
 export default function Create({ products, tcgs }: Props) {
@@ -41,7 +41,7 @@ export default function Create({ products, tcgs }: Props) {
                         <CollectionItemForm
                             form={form}
                             products={products}
-							tcgs={tcgs}
+                            tcgs={tcgs}
                             submitLabel="Ajouter"
                             submittingLabel="Ajout en cours..."
                             onSubmit={handleSubmit}
@@ -54,8 +54,8 @@ export default function Create({ products, tcgs }: Props) {
 }
 
 Create.layout = {
-	breadcrumbs: [
-		{ title: 'Ma collection', href: collectionItemsIndex() },
-		{ title: 'Ajouter', href: '' },
-	]
-}
+    breadcrumbs: [
+        { title: 'Ma collection', href: collectionItems.index() },
+        { title: 'Ajouter', href: '' },
+    ],
+};
