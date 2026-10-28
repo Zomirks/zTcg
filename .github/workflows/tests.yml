@@ -1,18 +1,14 @@
 name: tests
 
 on:
-  push:
-    branches:
-      - develop
-      - main
-      - master
-      - workos
   pull_request:
     branches:
-      - develop
+      - dev
       - main
-      - master
-      - workos
+  workflow_call:
+
+permissions:
+  contents: read
 
 jobs:
   ci:
@@ -65,7 +61,7 @@ jobs:
       - name: Install Dependencies
         run: |
           composer install --no-interaction --prefer-dist --optimize-autoloader
-          pnpm install
+          pnpm install --frozen-lockfile
 
       - name: Copy Environment File
         run: cp .env.example .env
