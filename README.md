@@ -44,12 +44,16 @@ Inscription, connexion, vérification d'email, réinitialisation du mot de passe
 Prérequis : PHP 8.4+, Composer, Node.js 22+, pnpm et MariaDB.
 
 ```bash
+cp .env.example .env
+```
+
+Renseignez les accès à la base de données dans `.env`, puis :
+
+```bash
 composer setup
 ```
 
-Cette commande installe les dépendances PHP et JS, crée le `.env`, génère la clé de l'application, lance les migrations et compile les assets.
-
-Si les migrations échouent, renseignez les accès à la base de données dans `.env`, puis relancez `php artisan migrate`.
+Cette commande installe les dépendances PHP et JS, génère la clé de l'application, lance les migrations et compile les assets.
 
 ## Lancement
 
@@ -70,7 +74,13 @@ Avec Sail, définissez `DB_HOST=mariadb` dans `.env`. L'application est alors ac
 
 ## Intégration et déploiement
 
-GitHub Actions lance les tests et le lint sur les pull requests et les branches principales, et déploie automatiquement :
+GitHub Actions vérifie chaque pull request vers `dev` et `main` : tests Pest, style PHP (Pint), lint, formatage et types côté frontend.
+
+À chaque push, le déploiement n'est lancé que si ces vérifications réussissent :
 
 - `main` → production
 - `dev` → préproduction
+
+## Licence
+
+© Cyril Fischer — tous droits réservés. Le code est publié à titre de démonstration ; toute réutilisation nécessite une autorisation.
