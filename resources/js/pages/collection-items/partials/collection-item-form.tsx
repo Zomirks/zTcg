@@ -1,5 +1,5 @@
-import { usePage} from '@inertiajs/react';
-import type {useForm} from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
+import type { useForm } from '@inertiajs/react';
 import { CalendarIcon } from 'lucide-react';
 import { useState } from 'react';
 
@@ -14,9 +14,9 @@ import {
 } from '@/components/ui/input-group';
 import { Label } from '@/components/ui/label';
 import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
 } from '@/components/ui/popover';
 import {
     Select,
@@ -33,7 +33,7 @@ import type { CollectionItemFormData, Product, Tcg } from '@/types/models';
 interface Props {
     form: ReturnType<typeof useForm<CollectionItemFormData>>;
     products: Product[];
-	tcgs: Tcg[];
+    tcgs: Tcg[];
     defaultTcgId?: number;
     submitLabel: string;
     submittingLabel: string;
@@ -43,21 +43,23 @@ interface Props {
 export default function CollectionItemForm({
     form,
     products,
-	tcgs,
+    tcgs,
     defaultTcgId,
     submitLabel,
     submittingLabel,
     onSubmit,
 }: Props) {
     const { data, setData, processing, errors } = form;
-	const { enums } = usePage().props;
+    const { enums } = usePage().props;
 
     const [selectedTcgId, setSelectedTcgId] = useState<string>(
         defaultTcgId ? String(defaultTcgId) : '',
     );
 
     const filteredProducts = selectedTcgId
-		? products.filter((product) => product.set.tcg.id === Number(selectedTcgId))
+        ? products.filter(
+              (product) => product.set.tcg.id === Number(selectedTcgId),
+          )
         : [];
 
     return (
@@ -84,7 +86,10 @@ export default function CollectionItemForm({
                 </div>
 
                 <div>
-					<Label htmlFor="purchase_price">Prix d'achat <span className='text-muted ml-2'>(à l'unité)</span></Label>
+                    <Label htmlFor="purchase_price">
+                        Prix d'achat{' '}
+                        <span className="ml-2 text-muted">(à l'unité)</span>
+                    </Label>
                     <InputGroup>
                         <InputGroupInput
                             type="number"
@@ -146,9 +151,10 @@ export default function CollectionItemForm({
                     >
                         <SelectTrigger id="product_id" className="w-full">
                             <SelectValue
-                                placeholder={!selectedTcgId
-									? 'Veuillez sélectionner une licence'
-									: 'Sélectionnez un produit'
+                                placeholder={
+                                    !selectedTcgId
+                                        ? 'Veuillez sélectionner une licence'
+                                        : 'Sélectionnez un produit'
                                 }
                             />
                         </SelectTrigger>
@@ -159,7 +165,13 @@ export default function CollectionItemForm({
                                         key={product.id}
                                         value={String(product.id)}
                                     >
-										{product.set.name} — {product.name ?? enums.productTypes.find(type => type.value === product.product_type)?.label}
+                                        {product.set.name} —{' '}
+                                        {product.name ??
+                                            enums.productTypes.find(
+                                                (type) =>
+                                                    type.value ===
+                                                    product.product_type,
+                                            )?.label}
                                     </SelectItem>
                                 ))}
                             </SelectGroup>
@@ -191,7 +203,7 @@ export default function CollectionItemForm({
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
-								{enums.productConditions.map((condition) => (
+                                {enums.productConditions.map((condition) => (
                                     <SelectItem
                                         key={condition.value}
                                         value={condition.value}
@@ -219,27 +231,49 @@ export default function CollectionItemForm({
                                 data-empty={!data.purchase_date}
                             >
                                 <CalendarIcon />
-                                <span className={!data.purchase_date ? 'text-muted-foreground' : '' }>
-                                    {data.purchase_date ? new Date(data.purchase_date + 'T00:00:00').toLocaleDateString('fr-FR', {
-										year: 'numeric',
-										month: 'long',
-										day: 'numeric',
-									}) : 'Sélectionnez une date'}
+                                <span
+                                    className={
+                                        !data.purchase_date
+                                            ? 'text-muted-foreground'
+                                            : ''
+                                    }
+                                >
+                                    {data.purchase_date
+                                        ? new Date(
+                                              data.purchase_date + 'T00:00:00',
+                                          ).toLocaleDateString('fr-FR', {
+                                              year: 'numeric',
+                                              month: 'long',
+                                              day: 'numeric',
+                                          })
+                                        : 'Sélectionnez une date'}
                                 </span>
                             </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0 bg-surface border-border">
+                        <PopoverContent className="bg-surface w-auto border-border p-0">
                             <Calendar
                                 mode="single"
                                 required
                                 selected={
-                                    data.purchase_date ? new Date(data.purchase_date + 'T00:00:00') : undefined
+                                    data.purchase_date
+                                        ? new Date(
+                                              data.purchase_date + 'T00:00:00',
+                                          )
+                                        : undefined
                                 }
                                 onSelect={(date) => {
                                     const year = date.getFullYear();
-                                    const month = String(date.getMonth() + 1).padStart(2, '0');
-                                    const day = String(date.getDate()).padStart(2, '0');
-                                    setData('purchase_date', `${year}-${month}-${day}`);
+                                    const month = String(
+                                        date.getMonth() + 1,
+                                    ).padStart(2, '0');
+                                    const day = String(date.getDate()).padStart(
+                                        2,
+                                        '0',
+                                    );
+                                    setData(
+                                        'purchase_date',
+                                        `${year}-${month}-${day}`,
+                                    );
                                 }}
                             />
                         </PopoverContent>
@@ -257,7 +291,7 @@ export default function CollectionItemForm({
                 </div>
             </div>
 
-            <div className="flex justify-center mt-6">
+            <div className="mt-6 flex justify-center">
                 <Button size="lg" type="submit" disabled={processing}>
                     {processing ? submittingLabel : submitLabel}
                 </Button>

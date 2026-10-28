@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\ProductCondition;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateCollectionItemRequest extends FormRequest
 {
