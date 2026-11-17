@@ -84,6 +84,7 @@ jobs:
       - name: Post-deploy commands
         run: |
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            set -euo pipefail
             cd ~/sites/${{ steps.target.outputs.path }}
             /opt/php8.5/bin/php artisan storage:link
             /opt/php8.5/bin/php artisan migrate --force

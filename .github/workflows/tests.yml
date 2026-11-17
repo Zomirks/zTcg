@@ -14,10 +14,6 @@ jobs:
   ci:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        php-version: ['8.4', '8.5']
-
     env:
       DB_CONNECTION: mariadb
       DB_HOST: 127.0.0.1
@@ -45,32 +41,30 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-version }}
+          php-version: '8.5'
           extensions: pdo_mysql
           tools: composer:v2
+          coverage: none
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Cache Composer Dependencies
+        uses: actions/cache@v4
         with:
-          node-version: '22'
-          cache: 'pnpm'
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ runner.os }}-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-
 
       - name: Install Dependencies
-        run: |
-          composer install --no-interaction --prefer-dist --optimize-autoloader
-          pnpm install --frozen-lockfile
+        run: composer install --no-interaction --prefer-dist --no-progress
 
       - name: Copy Environment File
         run: cp .env.example .env
 
       - name: Generate Application Key
         run: php artisan key:generate
-
-      - name: Build Assets
-        run: pnpm run build
 
       - name: Tests
         run: ./vendor/bin/pest
