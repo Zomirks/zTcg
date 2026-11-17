@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Set;
+use App\Models\Tcg;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
