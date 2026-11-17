@@ -35,6 +35,7 @@ class UpdateProductRequest extends FormRequest
             'barcode' => ['sometimes', 'nullable', 'string', Rule::unique('products', 'barcode')->ignore($this->product)],
             'boosters_count' => ['sometimes', 'nullable', 'integer', 'min:1'],
             'set_id' => ['sometimes', 'exists:sets,id'],
+            'remove_image' => ['sometimes', 'boolean'],
         ];
     }
 
@@ -50,7 +51,6 @@ class UpdateProductRequest extends FormRequest
             'image.max' => 'L\'image téléchargée est trop lourde',
             'image.mimes' => 'Le type d\'image téléchargée n\'est pas supporté',
             'release_date.date' => 'La date de sortie est invalide.',
-            'remove_image' => ['sometimes', 'boolean'],
         ];
     }
 }
