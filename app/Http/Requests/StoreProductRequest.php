@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\Language;
 use App\Enums\ProductType;
+use App\Models\Product;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -15,7 +16,7 @@ class StoreProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()->can('create', Product::class);
     }
 
     /**
