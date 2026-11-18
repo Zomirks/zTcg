@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRole;
 use App\Models\User;
 
 test('profile page is displayed', function () {
@@ -82,4 +83,25 @@ test('correct password must be provided to delete account', function () {
         ->assertRedirect(route('profile.edit'));
 
     expect($user->fresh())->not->toBeNull();
+});
+
+test('user can\'t change their role', function () {
+    $user = User::factory()->create();
+
+    $response = $this
+        ->actingAs($user)
+        ->patch(route('profile.update'), [
+            'name' => 'John',
+            'email' => $user->email,
+            'role' => 'admin',
+        ]);
+
+    $response
+        ->assertSessionHasNoErrors()
+        ->assertRedirect(route('profile.edit'));
+
+    $user->refresh();
+
+    expect($user->name)->toBe('John');
+    expect($user->role)->toBe(UserRole::User);
 });
